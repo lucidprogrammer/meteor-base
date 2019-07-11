@@ -1,5 +1,5 @@
 FROM buildpack-deps:jessie
-MAINTAINER Lucid Programmer <lucidprogrammer@hotmail.com>
+LABEL Lucid Programmer <lucidprogrammer@hotmail.com>
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && apt-get install -y locales && \
 	echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
@@ -28,9 +28,12 @@ RUN apt-get update && apt-get install -y locales && \
 					  libnss3-dev \
 					  gcc-multilib \
 					  g++-multilib
+ARG METEOR_VERSION
+ENV METEOR_VERSION ${METEOR_VERSION}
 
-RUN curl "https://install.meteor.com/?release=1.6" | /bin/sh
-ENV dev_bundle=1.6.0
+RUN curl "https://install.meteor.com/?release=${METEOR_VERSION}" | /bin/sh
+ENV dev_bundle=${METEOR_VERSION}
+
 ENV PATH=$PATH:/root/.meteor/packages/meteor-tool/$dev_bundle/mt-os.linux.x86_64/dev_bundle/bin:/root/.meteor/packages/meteor-tool/$dev_bundle/mt-os.linux.x86_64/dev_bundle/mongodb/bin \
     NODE_PATH=/root/.meteor/packages/meteor-tool/$dev_bundle/mt-os.linux.x86_64/dev_bundle/lib/node_modules:/root/.meteor/packages/meteor-tool/$dev_bundle/mt-os.linux.x86_64/dev_bundle/server-lib/node_modules\
     METEOR_ALLOW_SUPERUSER=true\
